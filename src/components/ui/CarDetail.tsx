@@ -25,7 +25,7 @@ export default function CarDetail({
       <CardContent>
         {isLoading ? (
           <>
-            <Skeleton className="h-8 w-20 bg-gray-200 animate-pulse" />
+            <Skeleton className="h-8 w-20 bg-pink-200 animate-pulse" />
           </>
         ) : (
           <p className="text-xl font-bold mb-2">{firstValue}</p>
@@ -33,7 +33,7 @@ export default function CarDetail({
 
         {isLoading ? (
           <>
-            <Skeleton className="h-4 w-32 mt-1 bg-gray-200 animate-pulse" />
+            <Skeleton className="h-4 w-32 mt-1 bg-pink-200 animate-pulse" />
           </>
         ) : (
           <p className="text-xs text-muted-foreground">{secondValue}</p>

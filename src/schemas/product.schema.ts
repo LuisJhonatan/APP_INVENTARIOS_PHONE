@@ -3,7 +3,7 @@ import { z } from "zod";
 export const MarkProductSchema = z.object({
   id: z.number(),
   name: z.string(),
-})
+});
 
 /**
  * Esquema de validación para un producto.
@@ -54,7 +54,6 @@ export const ProductResponseSchema = z
 export const SearchByWordSchema = z.object({
   search: z
     .string()
-    .min(1, { message: "El campo de búsqueda no puede estar vacío" })
     .max(100, "El campo de búsqueda no puede exceder los 100 caracteres"),
 });
 

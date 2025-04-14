@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MarkProduct } from "@/schemas/product.schema";
+import { MarkProduct, Product } from "@/schemas/product.schema";
 import { BarChart3, Package, Settings, ShoppingCart } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,9 +18,9 @@ import { useFetchCellPhones } from "@/hooks/useFetchCellPhones";
 
 export default function SearchProduct() {
   const [cellPhoneBrand, setCellPhoneBrand] = useState<MarkProduct[]>([]); //maneja el estado de las marcas de celulares
-
-  const { isLoading, setIsLoading, cellPhones, setCellPhones } =
-    useFetchCellPhones(); // Llama al hook para cargar los productos al renderizar la página
+  const [selectedBrand, setSelectedBrand] = useState<number>(1); // Marca seleccionada
+  const { isLoading, setIsLoading, cellPhones, setCellPhones, filteredCellPhones } =
+    useFetchCellPhones(selectedBrand); // Llama al hook para cargar los productos al renderizar la página
 
   useEffect(() => {
     setCellPhoneBrand([
@@ -30,6 +30,13 @@ export default function SearchProduct() {
     ]);
   }, []);
 
+  
+  /*useEffect(()=>{
+    console.log(selectedBrand, );
+    
+    console.log(filteredCellPhones);
+
+  }, [filteredCellPhones])*/
   return (
     <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
       <Card className="col-span-4">
@@ -47,55 +54,59 @@ export default function SearchProduct() {
             setIsLoading={setIsLoading}
           />
 
-          <Tabs defaultValue="iphone" className="my-4">
+            <Tabs
+            defaultValue="1"
+            className="my-4"
+            onValueChange={(value) => setSelectedBrand(Number(value))} // Actualiza la marca seleccionada
+            >
             {/* Lista de marcas de celulares */}
             <TabsList className="grid w-full grid-cols-3">
               {cellPhoneBrand.map((brand) => {
-                return (
-                  <TabsTrigger key={brand.id} value={brand.name.toLowerCase()}>
-                    {brand.name}
-                  </TabsTrigger>
-                );
+              return (
+                <TabsTrigger key={brand.id} value={brand.id.toString()}>
+                {brand.name}
+                </TabsTrigger>
+              );
               })}
             </TabsList>
 
             {/* Skeleton antes de renderizar la información */}
-            <TabsContent value="iphone">
+            <TabsContent value={selectedBrand.toString()}>
               {isLoading && (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {Array.from({ length: 6 }).map((_, index) => (
-                    <Card key={index}>
-                      <CardHeader>
-                        <div className="h-6 bg-muted rounded w-3/4"></div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="h-4 bg-muted rounded w-1/2 mb-2"></div>
-                        <div className="h-4 bg-muted rounded w-1/3"></div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                  <div className="h-6 rounded w-3/4 bg-pink-200"></div>
+                  </CardHeader>
+                  <CardContent>
+                  <div className="h-4 rounded w-1/2 mb-2 bg-pink-200"></div>
+                  <div className="h-4 rounded w-1/3 bg-pink-200"></div>
+                  </CardContent>
+                </Card>
+                ))}
+              </div>
               )}
 
               {/* Productos encontrados */}
-              {cellPhones.length > 0 ? (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[304px] overflow-y-auto">
-                  {cellPhones.map((product, index) => {
-                    return <CarProduct key={index} {...product} />;
-                  })}
-                </div>
+              {filteredCellPhones.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[304px] overflow-y-auto">
+                {filteredCellPhones.map((product, index) => {
+                return <CarProduct key={index} {...product} />;
+                })}
+              </div>
               ) : (
-                cellPhones.length === 0 &&
-                !isLoading && (
-                  <div>
-                    <p className="text-muted-foreground text-sm text-center">
-                      No hay productos disponibles
-                    </p>
-                  </div>
-                )
+              filteredCellPhones.length === 0 &&
+              !isLoading && (
+                <div>
+                <p className="text-muted-foreground text-sm text-center">
+                  No hay productos disponibles para esta marca
+                </p>
+                </div>
+              )
               )}
             </TabsContent>
-          </Tabs>
+            </Tabs>
         </CardContent>
       </Card>
 

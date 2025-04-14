@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import CarDetail from "@/components/ui/CarDetail";
+import { useFetchInformation } from "@/hooks/useFetchInformation";
 import {
   BarChart3,
   Package,
@@ -11,16 +12,8 @@ import {
 import { useEffect, useState } from "react";
 
 export default function Summary() {
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Simular carga de datos
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500); // 2.5 segundos
-
-    return () => clearTimeout(timer);
-  }, []);
+  const {isLoading, setIsLoading, information} = useFetchInformation();
 
   return (
     <>
@@ -47,28 +40,28 @@ export default function Summary() {
       <section className="max-w-7xl grid gap-4 md:grid-cols-2 lg:grid-cols-4 mx-auto p-4 sm:p-6 lg:p-8">
         <CarDetail
           title="Total Productos"
-          firstValue="245"
+          firstValue={information?.total_productos.toString() || "0.0"}
           secondValue="+12 desde el mes pasado"
           isLoading={isLoading}
           Icon={Package}
         />
         <CarDetail
           title="Ventas del mes"
-          firstValue="$24,500"
+          firstValue={`$${information?.ventas_mes}` || "0.0"}
           secondValue="+15% desde el mes pasado"
           isLoading={isLoading}
           Icon={ShoppingCart}
         />
         <CarDetail
           title="Productos Agotados"
-          firstValue="8"
+          firstValue={information?.productos_agotados.toString() || "0"}
           secondValue="-3 desde el mes pasado"
           isLoading={isLoading}
           Icon={BarChart3}
         />
         <CarDetail
           title="Marcas disponibles"
-          firstValue="3"
+          firstValue={information?.marcas_disponibles.toString() || "0"}
           secondValue="Iphone, Samsung, Xiaomi, ..."
           isLoading={isLoading}
           Icon={Smartphone}

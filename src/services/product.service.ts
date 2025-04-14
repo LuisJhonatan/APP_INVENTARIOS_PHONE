@@ -13,7 +13,6 @@ export async function searchProductByWord(search: string = "") {
     const response = await apiClient.post("/productos/listarproductos", {
       nombre_producto: search,
     });
-    console.log(response.data); // Log the parsed response for debugging
 
     const responseParse = ProductResponseSchema.parse(response.data);
     
