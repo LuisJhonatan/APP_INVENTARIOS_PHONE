@@ -1,5 +1,5 @@
-import SearchProduct from "@/components/section/home/SearchProduct";
-import Summary from "@/components/section/home/Summary";
+import SearchProduct from "@/app/_section/SearchProduct";
+import Summary from "@/app/_section/Summary";
 
 export default function Home() {
   return (

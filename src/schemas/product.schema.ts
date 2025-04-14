@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export const MarkProductSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+})
+
 /**
  * Esquema de validación para un producto.
  *
@@ -9,12 +14,17 @@ import { z } from "zod";
  * @property {number} stock - Cantidad de stock disponible.
  * @property {string} precio_venta - Precio de venta del producto.
  */
-export const ProductSchema = z.object({
-  nombre: z.string(),
-  descripcion: z.string(),
-  stock: z.number(),
-  precio_venta: z.string(),
-});
+export const ProductSchema = z
+  .object({
+    nombre: z.string(),
+    precio_venta: z.string(),
+    stock: z.number(),
+    descripcion: z.string(),
+    id_producto: z.number(),
+    id_marca: z.number(),
+    orden: z.number(),
+  })
+  .strict();
 
 /**
  * Esquema de respuesta para operaciones relacionadas con productos.
@@ -25,12 +35,14 @@ export const ProductSchema = z.object({
  * @property {Product[]} productos - Lista de productos.
  * @property {string} status - Estado de la respuesta.
  */
-export const ProductResponseSchema = z.object({
-  code: z.number(),
-  message: z.string(),
-  productos: z.array(ProductSchema),
-  status: z.string(),
-});
+export const ProductResponseSchema = z
+  .object({
+    code: z.number(),
+    message: z.string(),
+    productos: z.array(ProductSchema),
+    status: z.string(),
+  })
+  .strict();
 
 /**
  * Esquema de validación para la búsqueda de productos por palabra clave.
@@ -46,6 +58,7 @@ export const SearchByWordSchema = z.object({
     .max(100, "El campo de búsqueda no puede exceder los 100 caracteres"),
 });
 
+export type MarkProduct = z.infer<typeof MarkProductSchema>;
 export type SearchByWord = z.infer<typeof SearchByWordSchema>;
 export type Product = z.infer<typeof ProductSchema>;
 export type ProductResponse = z.infer<typeof ProductResponseSchema>;
