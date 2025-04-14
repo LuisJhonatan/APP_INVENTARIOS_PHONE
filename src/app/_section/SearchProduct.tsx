@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MarkProduct, Product } from "@/schemas/product.schema";
+import { MarkProduct } from "@/schemas/product.schema";
 import { BarChart3, Package, Settings, ShoppingCart } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,7 +19,7 @@ import { useFetchCellPhones } from "@/hooks/useFetchCellPhones";
 export default function SearchProduct() {
   const [cellPhoneBrand, setCellPhoneBrand] = useState<MarkProduct[]>([]); //maneja el estado de las marcas de celulares
   const [selectedBrand, setSelectedBrand] = useState<number>(1); // Marca seleccionada
-  const { isLoading, setIsLoading, cellPhones, setCellPhones, filteredCellPhones } =
+  const { isLoading, setIsLoading, setCellPhones, filteredCellPhones } =
     useFetchCellPhones(selectedBrand); // Llama al hook para cargar los productos al renderizar la página
 
   useEffect(() => {

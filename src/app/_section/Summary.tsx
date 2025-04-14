@@ -9,11 +9,10 @@ import {
   ShoppingCart,
   Smartphone,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 
 export default function Summary() {
 
-  const {isLoading, setIsLoading, information} = useFetchInformation();
+  const {isLoading, information} = useFetchInformation();
 
   return (
     <>
