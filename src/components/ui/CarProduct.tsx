@@ -10,7 +10,7 @@ export default function CarProduct({
   stock: number;
 }) {
   return (
-    <Card>
+    <Card className="h-[144px]">
       <CardHeader>
         <CardTitle>{nombre}</CardTitle>
       </CardHeader>

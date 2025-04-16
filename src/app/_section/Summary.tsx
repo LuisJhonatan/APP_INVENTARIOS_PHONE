@@ -1,6 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import CarDetail from "@/components/ui/CarDetail";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useAddProductForm } from "@/hooks/useAddProductForm";
 import { useFetchInformation } from "@/hooks/useFetchInformation";
 import {
   BarChart3,
@@ -9,15 +11,33 @@ import {
   ShoppingCart,
   Smartphone,
 } from "lucide-react";
-
+import AddProductForm from "../_components/AddProductForm";
+import SuccessModal from "@/components/ui/SuccesModal";
+import { useState } from "react";
 export default function Summary() {
-
-  const {isLoading, information} = useFetchInformation();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para controlar el modal de agregar producto
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Estado para mostrar el modal de éxito o error
+  const [success, setSuccess] = useState<"success" | "error">("error"); // Estado para determinar si la operación fue exitosa o no
+  const { isLoading, information, fetchInformation } = useFetchInformation(); // Hook para obtener la información del resumen
+  const {
+    showAlert,
+    isSubmitting,
+    register,
+    control,
+    handleFormSubmit,
+    errors,
+  } = useAddProductForm({
+    setIsDialogOpen,
+    setShowSuccessModal,
+    setSuccess,
+    fetchInformation,
+  }); // Hook para manejar el formulario de agregar producto
 
   return (
     <>
-      {/* Sección de encabezado y descripción */}
+      {/* Sección de descripcion y agregar producto */}
       <section className="max-w-7xl flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Título y descripción del panel de control */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
             Panel de Control
@@ -27,12 +47,40 @@ export default function Summary() {
           </p>
         </div>
 
+        {/* Botón para agregar un nuevo producto */}
         <div className="flex items-center gap-2">
-          <Button className="cursor-pointer">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Agregar Producto
-          </Button>
+          <Dialog
+            open={isDialogOpen}
+            onOpenChange={(open) => {
+              setIsDialogOpen(open);
+              //if (!open) reset(); // Limpiar el formulario al cerrar
+            }}
+          >
+            <DialogTrigger asChild>
+              <Button className="cursor-pointer">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Agregar Producto
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px]">
+              <AddProductForm
+                showAlert={showAlert}
+                isSubmitting={isSubmitting}
+                register={register}
+                handleFormSubmit={handleFormSubmit}
+                errors={errors}
+                control={control}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
+
+        {/* Modal de éxito o error al agregar producto */}
+        <SuccessModal
+          showSuccessModal={showSuccessModal}
+          setShowSuccessModal={setShowSuccessModal}
+          type={success}
+        />
       </section>
 
       {/* Sección de detalles del resumen */}

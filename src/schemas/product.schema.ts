@@ -5,14 +5,8 @@ export const MarkProductSchema = z.object({
   name: z.string(),
 });
 
-/**
+/*
  * Esquema de validación para un producto.
- *
- * @typedef Product
- * @property {string} nombre - Nombre del producto.
- * @property {string} descripcion - Descripción del producto.
- * @property {number} stock - Cantidad de stock disponible.
- * @property {string} precio_venta - Precio de venta del producto.
  */
 export const ProductSchema = z
   .object({
@@ -26,14 +20,8 @@ export const ProductSchema = z
   })
   .strict();
 
-/**
+/*
  * Esquema de respuesta para operaciones relacionadas con productos.
- *
- * @typedef ProductResponse
- * @property {number} code - Código de respuesta.
- * @property {string} message - Mensaje descriptivo de la respuesta.
- * @property {Product[]} productos - Lista de productos.
- * @property {string} status - Estado de la respuesta.
  */
 export const ProductResponseSchema = z
   .object({
@@ -45,11 +33,61 @@ export const ProductResponseSchema = z
   .strict();
 
 /**
- * Esquema de validación para la búsqueda de productos por palabra clave.
+ * Esquema de validación para agregar un producto.
+ */
+export const AddProductSchema = z
+  .object({
+    nombre_producto: z
+      .string()
+      .min(1, "El nombre es obligatorio")
+      .max(100, "El nombre no puede exceder los 100 caracteres"),
+    descripcion: z
+      .string()
+      .max(500, "La descripción no puede exceder los 500 caracteres")
+      .optional(),
+    id_marca: z.string().regex(/^\d+$/, "Debe ser un número válido"),
+    precio_compra: z
+      .string()
+      .regex(/^\d+(\.\d{1,2})?$/, "Debe ser un número válido")
+      .optional(),
+    precio_venta: z.string().regex(/^\d+$/, "Debe ser un número válido"),
+    stock: z.string().regex(/^\d+$/, "Debe ser un número válido").optional(),
+    id_tipo_producto: z
+      .string()
+      .regex(/^\d+(\.\d{1,2})?$/, "Debe ser un número válido"),
+  })
+  .strict();
+/**
+ * Esquema de validación para agregar un producto con conversión de números.
  *
- * @typedef SearchByWord
- * @property {string} search - Palabra clave para realizar la búsqueda.
- * Debe tener al menos 1 carácter y no exceder los 100 caracteres.
+ * Este esquema convierte automáticamente los campos numéricos de cadenas a números.
+ */
+export const AddProductParseSchema = AddProductSchema.extend({
+  id_marca: z.preprocess((val) => Number(val), z.number().int()),
+  precio_compra: z.preprocess(
+    (val) => (val !== undefined ? Number(val) : undefined),
+    z.number().optional()
+  ),
+  precio_venta: z.preprocess((val) => Number(val), z.number()),
+  stock: z.preprocess(
+    (val) => (val !== undefined ? Number(val) : undefined),
+    z.number().optional()
+  ),
+  id_tipo_producto: z.preprocess((val) => Number(val), z.number()),
+});
+
+/**
+ * Esquema de respuesta para agregar un producto.
+ */
+
+export const AddProductResponseSchema = z.object({
+  code: z.number(),
+  message: z.string(),
+  status: z.string(),
+});
+
+/*
+ * Esquema de validación para la búsqueda de productos por palabra clave.
  */
 export const SearchByWordSchema = z.object({
   search: z
@@ -60,4 +98,5 @@ export const SearchByWordSchema = z.object({
 export type MarkProduct = z.infer<typeof MarkProductSchema>;
 export type SearchByWord = z.infer<typeof SearchByWordSchema>;
 export type Product = z.infer<typeof ProductSchema>;
-export type ProductResponse = z.infer<typeof ProductResponseSchema>;
+export type AddProduct = z.infer<typeof AddProductSchema>;
+export type AddProductParse = z.infer<typeof AddProductParseSchema>;

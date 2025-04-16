@@ -11,8 +11,10 @@ export default function SearchProductForm({
   setCellPhones: (cellPhones: Product[]) => void;
   setIsLoading: (isLoading: boolean) => void;
 }) {
-  const { register, handleSubmit, errors, onSubmit } =
-    useSearchProductForm({ setIsLoading, setCellPhones }); // Importa el hook personalizado para manejar el formulario de búsqueda
+  const { register, handleSubmit, errors, onSubmit } = useSearchProductForm({
+    setIsLoading,
+    setCellPhones,
+  }); // Importa el hook personalizado para manejar el formulario de búsqueda
 
   return (
     <form

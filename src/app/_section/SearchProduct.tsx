@@ -30,7 +30,6 @@ export default function SearchProduct() {
     ]);
   }, []);
 
-  
   /*useEffect(()=>{
     console.log(selectedBrand, );
     
@@ -54,59 +53,59 @@ export default function SearchProduct() {
             setIsLoading={setIsLoading}
           />
 
-            <Tabs
+          <Tabs
             defaultValue="1"
             className="my-4"
             onValueChange={(value) => setSelectedBrand(Number(value))} // Actualiza la marca seleccionada
-            >
+          >
             {/* Lista de marcas de celulares */}
             <TabsList className="grid w-full grid-cols-3">
               {cellPhoneBrand.map((brand) => {
-              return (
-                <TabsTrigger key={brand.id} value={brand.id.toString()}>
-                {brand.name}
-                </TabsTrigger>
-              );
+                return (
+                  <TabsTrigger key={brand.id} value={brand.id.toString()}>
+                    {brand.name}
+                  </TabsTrigger>
+                );
               })}
             </TabsList>
 
             {/* Skeleton antes de renderizar la información */}
             <TabsContent value={selectedBrand.toString()}>
               {isLoading && (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {Array.from({ length: 6 }).map((_, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                  <div className="h-6 rounded w-3/4 bg-pink-200"></div>
-                  </CardHeader>
-                  <CardContent>
-                  <div className="h-4 rounded w-1/2 mb-2 bg-pink-200"></div>
-                  <div className="h-4 rounded w-1/3 bg-pink-200"></div>
-                  </CardContent>
-                </Card>
-                ))}
-              </div>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[304px]">
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <Card key={index}>
+                      <CardHeader>
+                        <div className="h-6 rounded w-3/4 bg-pink-200"></div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="h-4 rounded w-1/2 mb-2 bg-pink-200"></div>
+                        <div className="h-4 rounded w-1/3 bg-pink-200"></div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               )}
 
               {/* Productos encontrados */}
               {filteredCellPhones.length > 0 ? (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[304px] overflow-y-auto">
-                {filteredCellPhones.map((product, index) => {
-                return <CarProduct key={index} {...product} />;
-                })}
-              </div>
-              ) : (
-              filteredCellPhones.length === 0 &&
-              !isLoading && (
-                <div>
-                <p className="text-muted-foreground text-sm text-center">
-                  No hay productos disponibles para esta marca
-                </p>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-h-[304px] overflow-y-auto">
+                  {filteredCellPhones.map((product, index) => {
+                    return <CarProduct key={index} {...product} />;
+                  })}
                 </div>
-              )
+              ) : (
+                filteredCellPhones.length === 0 &&
+                !isLoading && (
+                  <div>
+                    <p className="text-muted-foreground text-sm text-center">
+                      No hay productos disponibles para esta marca
+                    </p>
+                  </div>
+                )
               )}
             </TabsContent>
-            </Tabs>
+          </Tabs>
         </CardContent>
       </Card>
 
